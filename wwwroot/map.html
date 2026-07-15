@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rota Haritası - WeatherIntel</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0a0e17;
+            color: #fff;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 32px;
+            background: rgba(10, 14, 23, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .navbar a span {
+            color: #00d4ff;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            gap: 6px;
+        }
+
+        .navbar .nav-links a {
+            padding: 8px 18px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .navbar .nav-links a:hover {
+            background: rgba(0, 212, 255, 0.08);
+            color: #fff;
+        }
+
+        .navbar .nav-links a.active {
+            background: rgba(0, 212, 255, 0.12);
+            color: #00d4ff;
+            border: 1px solid rgba(0, 212, 255, 0.15);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 24px 60px;
+        }
+
+        .page-header {
+            margin-bottom: 28px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .page-header h1 span {
+            color: #00d4ff;
+        }
+
+        .page-header p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 15px;
+            margin-top: 4px;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px 24px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .search-box input {
+            flex: 1;
+            min-width: 160px;
+            padding: 12px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            font-size: 15px;
+            background: rgba(255, 255, 255, 0.04);
+            color: #fff;
+            transition: 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.08);
+        }
+
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        .search-box .btn {
+            padding: 12px 32px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: #fff;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+
+        .search-box .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.25);
+        }
+
+        #map {
+            height: 520px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            background: #0a0e17;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .loading.visible {
+            display: block;
+        }
+
+        .loading .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.06);
+            border-top: 3px solid #00d4ff;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+            margin: 0 auto 12px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            border-radius: 12px;
+            padding: 14px 20px;
+            color: #f87171;
+            text-align: center;
+            display: none;
+            margin-top: 16px;
+        }
+
+        .error.visible {
+            display: block;
+        }
+
+        .route-summary {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px 28px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .route-summary.visible {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .route-summary .route-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .route-summary .route-title .arrow {
+            color: #00d4ff;
+            margin: 0 8px;
+        }
+
+        .route-summary .route-subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .route-summary .route-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .route-summary .route-stat {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 12px 14px;
+            text-align: center;
+        }
+
+        .route-summary .route-stat .stat-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        .route-summary .route-stat .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            margin-top: 3px;
+        }
+
+        .route-summary .route-stat .stat-value.risk-high {
+            color: #f87171;
+        }
+        .route-summary .route-stat .stat-value.risk-medium {
+            color: #fbbf24;
+        }
+        .route-summary .route-stat .stat-value.risk-low {
+            color: #34d399;
+        }
+
+        .leaflet-popup-content-wrapper {
+            background: #1a1f2e !important;
+            color: #fff !important;
+            border-radius: 12px !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+
+        .leaflet-popup-tip {
+            background: #1a1f2e !important;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 10px;
+                padding: 12px 16px;
+            }
+            #map {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <a href="/">⛅ Weather<span>Intel</span></a>
+        <div class="nav-links">
+            <a href="/">📊 Dashboard</a>
+            <a href="/map.html" class="active">🗺️ Rota Haritası</a>
+        </div>
+    </nav>
+
+    <!-- ===== MAIN ===== -->
+    <div class="container">
+
+        <div class="page-header">
+            <h1>🗺️ Rota Haritası</h1>
+            <p>İki şehir arası rotayı ve hava durumunu harita üzerinde görüntüleyin</p>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="fromInput" placeholder="Başlangıç" value="İstanbul" />
+            <input type="text" id="toInput" placeholder="Bitiş" value="Ankara" />
+            <button class="btn" id="searchBtn">🗺️ Rota Göster</button>
+        </div>
+
+        <div class="loading" id="loading"><div class="spinner"></div><p>Rota hesaplanıyor...</p></div>
+        <div class="error" id="error"></div>
+
+        <div id="map"></div>
+
+        <div class="route-summary" id="routeSummary">
+            <div class="route-title">
+                <span id="routeFrom">İstanbul</span>
+                <span class="arrow">→</span>
+                <span id="routeTo">Ankara</span>
+            </div>
+            <div class="route-subtitle" id="routeSubtitle"></div>
+            <div class="route-stats" id="routeStats"></div>
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    </script>
+    <script>
+        let map;
+        let mapInitialized = false;
+
+        function initMap() {
+            if (mapInitialized) return;
+            map = L.map('map').setView([39.0, 35.0], 6);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap',
+                maxZoom: 19,
+            }).addTo(map);
+            mapInitialized = true;
+            setTimeout(() => map.invalidateSize(), 500);
+        }
+
+        function clearMap() {
+            if (!map) return;
+            map.eachLayer((layer) => {
+                if (layer instanceof L.Marker || layer instanceof L.Polyline) {
+                    map.removeLayer(layer);
+                }
+            });
+        }
+
+        function addRouteToMap(stops) {
+            clearMap();
+            const latLngs = stops.map(s => [s.latitude, s.longitude]);
+
+            L.polyline(latLngs, {
+                color: '#00d4ff',
+                weight: 5,
+                opacity: 0.85,
+                dashArray: '10, 8',
+            }).addTo(map);
+
+            stops.forEach((stop, i) => {
+                const isFirst = i === 0;
+                const isLast = i === stops.length - 1;
+                const color = isFirst ? '#34d399' : isLast ? '#f87171' : '#00d4ff';
+
+                const icon = L.divIcon({
+                    className: 'custom-marker',
+                    html: `<div style="
+                        background: ${color};
+                        width: 18px;
+                        height: 18px;
+                        border-radius: 50%;
+                        border: 3px solid #fff;
+                        box-shadow: 0 0 24px rgba(0,212,255,0.35);
+                    "></div>`,
+                    iconSize: [18, 18],
+                    iconAnchor: [9, 9],
+                });
+
+                const popupContent = `
+                    <strong style="font-size:15px;color:#00d4ff;">${stop.locationName}</strong><br/>
+                    🌡️ <strong>${stop.temperature}°C</strong><br/>
+                    ${stop.description || ''}<br/>
+                    👔 ${stop.clothingAdvice || ''}<br/>
+                    ⚠️ Risk: <strong style="color:${stop.riskLevel === 'Yüksek' ? '#f87171' : stop.riskLevel === 'Orta' ? '#fbbf24' : '#34d399'}">${stop.riskLevel || 'Bilinmiyor'}</strong>
+                `;
+
+                L.marker([stop.latitude, stop.longitude], { icon })
+                    .addTo(map)
+                    .bindPopup(popupContent);
+
+                if (isFirst || isLast) {
+                    setTimeout(() => {
+                        L.marker([stop.latitude, stop.longitude], { icon })
+                            .addTo(map)
+                            .bindPopup(popupContent)
+                            .openPopup();
+                    }, 400 + i * 150);
+                }
+            });
+
+            const bounds = L.latLngBounds(latLngs);
+            map.fitBounds(bounds, { padding: [60, 60] });
+            setTimeout(() => map.invalidateSize(), 300);
+        }
+
+        function showSummary(data) {
+            const el = document.getElementById('routeSummary');
+            el.classList.add('visible');
+
+            document.getElementById('routeFrom').textContent = data.fromCity;
+            document.getElementById('routeTo').textContent = data.toCity;
+            document.getElementById('routeSubtitle').textContent = data.summary || '';
+
+            const stats = document.getElementById('routeStats');
+            const riskClass = data.overallRisk === 'Yüksek' ? 'risk-high' : data.overallRisk === 'Orta' ?
+                'risk-medium' : 'risk-low';
+            stats.innerHTML = `
+                <div class="route-stat"><div class="stat-label">Mesafe</div><div class="stat-value">${data.totalDistance} km</div></div>
+                <div class="route-stat"><div class="stat-label">Ortalama</div><div class="stat-value" style="color:#00d4ff;">${data.averageTemperature}°C</div></div>
+                <div class="route-stat"><div class="stat-label">Risk</div><div class="stat-value ${riskClass}">${data.overallRisk}</div></div>
+                <div class="route-stat"><div class="stat-label">Nokta</div><div class="stat-value">${data.pointCount}</div></div>
+            `;
+        }
+
+        async function searchRoute() {
+            const from = document.getElementById('fromInput').value.trim();
+            const to = document.getElementById('toInput').value.trim();
+
+            if (!from || !to) {
+                showError('Lütfen başlangıç ve bitiş şehirlerini girin.');
+                return;
+            }
+
+            showLoading(true);
+            document.getElementById('routeSummary').classList.remove('visible');
+
+            try {
+                const response = await fetch(
+                    `/api/weather/route?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
+                if (!response.ok) {
+                    const err = await response.json().catch(() => ({ error: 'Bilinmeyen hata' }));
+                    throw new Error(err.error || 'Rota alınamadı.');
+                }
+                const data = await response.json();
+
+                if (data.stops && data.stops.length > 0) {
+                    initMap();
+                    addRouteToMap(data.stops);
+                    showSummary(data);
+                } else {
+                    showError('Rota verisi bulunamadı.');
+                }
+            } catch (err) {
+                showError(err.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').classList.toggle('visible', show);
+            document.getElementById('searchBtn').disabled = show;
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('error');
+            el.textContent = '❌ ' + msg;
+            el.classList.add('visible');
+            setTimeout(() => el.classList.remove('visible'), 5000);
+        }
+
+        // ========================================
+        // URL'DEN PARAMETRE AL
+        // ========================================
+        const urlParams = new URLSearchParams(window.location.search);
+        const fromParam = urlParams.get('from');
+        const toParam = urlParams.get('to');
+
+        if (fromParam && toParam) {
+            document.getElementById('fromInput').value = fromParam;
+            document.getElementById('toInput').value = toParam;
+        }
+
+        // ========================================
+        // EVENTS
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            initMap();
+            document.getElementById('searchBtn').addEventListener('click', searchRoute);
+            document.getElementById('fromInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') searchRoute();
+            });
+            document.getElementById('toInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') searchRoute();
+            });
+
+            setTimeout(searchRoute, 600);
+        });
+
+        window.addEventListener('resize', () => {
+            if (mapInitialized) {
+                setTimeout(() => map.invalidateSize(), 300);
+            }
+        });
+    </script>
+
+</body>
+</html>

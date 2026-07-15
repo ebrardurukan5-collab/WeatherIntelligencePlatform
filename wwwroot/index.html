@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WeatherIntel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Inter',sans-serif; background:#0a0e17; color:#fff; display:flex; min-height:100vh; }
+        .sidebar { width:240px; height:100vh; background:rgba(255,255,255,0.02); backdrop-filter:blur(20px); border-right:1px solid rgba(255,255,255,0.08); padding:20px 0; position:fixed; left:0; top:0; overflow-y:auto; z-index:100; display:flex; flex-direction:column; }
+        .sidebar-brand { padding:0 20px 24px; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:16px; }
+        .sidebar-brand h1 { font-size:20px; font-weight:700; }
+        .sidebar-brand h1 span { color:#00d4ff; }
+        .sidebar-brand small { color:rgba(255,255,255,0.35); font-size:11px; display:block; margin-top:2px; }
+        .sidebar-menu { flex:1; padding:0 12px; }
+        .sidebar-item { display:flex; align-items:center; gap:12px; padding:12px 16px; border-radius:10px; color:rgba(255,255,255,0.6); cursor:pointer; transition:0.3s; font-size:14px; font-weight:500; border:none; background:transparent; width:100%; text-align:left; }
+        .sidebar-item:hover { background:rgba(0,212,255,0.08); color:#fff; }
+        .sidebar-item.active { background:rgba(0,212,255,0.12); color:#00d4ff; border:1px solid rgba(0,212,255,0.15); }
+        .sidebar-item .icon { font-size:18px; width:24px; text-align:center; }
+        .sidebar-footer { padding:16px 20px; border-top:1px solid rgba(255,255,255,0.08); }
+        .sidebar-footer small { color:rgba(255,255,255,0.35); font-size:11px; }
+        .main { margin-left:240px; flex:1; min-height:100vh; padding:30px 40px 60px; }
+        .page { display:none; animation:fadeIn 0.4s ease; }
+        .page.active { display:block; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+        .page-header { margin-bottom:28px; }
+        .page-header h1 { font-size:28px; font-weight:700; }
+        .page-header p { color:rgba(255,255,255,0.6); font-size:15px; margin-top:4px; }
+        .search-box { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:20px 24px; display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:24px; }
+        .search-box input { flex:1; min-width:160px; padding:12px 18px; border:1px solid rgba(255,255,255,0.08); border-radius:10px; font-size:15px; background:rgba(255,255,255,0.04); color:#fff; transition:0.3s; }
+        .search-box input:focus { outline:none; border-color:#00d4ff; box-shadow:0 0 0 4px rgba(0,212,255,0.08); }
+        .search-box input::placeholder { color:rgba(255,255,255,0.35); }
+        .search-box .btn { padding:12px 32px; border:none; border-radius:10px; background:linear-gradient(135deg,#00d4ff,#0099cc); color:#fff; font-weight:600; font-size:15px; cursor:pointer; transition:0.3s; white-space:nowrap; }
+        .search-box .btn:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(0,212,255,0.25); }
+        .search-box .btn-map { background:linear-gradient(135deg,#34d399,#059669); }
+        .weather-card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:30px; display:none; animation:fadeIn 0.5s ease; }
+        .weather-card.visible { display:block; }
+        .weather-card .top { display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px; }
+        .weather-card .city { font-size:28px; font-weight:700; }
+        .weather-card .city .country { font-size:14px; font-weight:400; color:rgba(255,255,255,0.35); margin-left:8px; }
+        .weather-card .desc { font-size:16px; color:rgba(255,255,255,0.6); text-transform:capitalize; }
+        .weather-card .icon { font-size:56px; }
+        .weather-card .temp { font-size:56px; font-weight:800; color:#00d4ff; line-height:1; }
+        .weather-card .temp small { font-size:24px; font-weight:400; color:rgba(255,255,255,0.35); }
+        .weather-card .feels { font-size:14px; color:rgba(255,255,255,0.35); margin-left:12px; }
+        .weather-card .badges { display:flex; gap:10px; flex-wrap:wrap; margin:12px 0; }
+        .weather-card .badge { padding:5px 16px; border-radius:20px; font-size:13px; font-weight:600; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); }
+        .weather-card .badge.risk-low { background:rgba(52,211,153,0.15); color:#34d399; }
+        .weather-card .badge.risk-medium { background:rgba(251,191,36,0.15); color:#fbbf24; }
+        .weather-card .badge.risk-high { background:rgba(239,68,68,0.15); color:#f87171; }
+        .weather-card .metrics { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.06); }
+        .weather-card .metric { background:rgba(255,255,255,0.03); border-radius:10px; padding:12px; text-align:center; }
+        .weather-card .metric .label { font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:rgba(255,255,255,0.35); }
+        .weather-card .metric .value { font-size:17px; font-weight:600; margin-top:3px; }
+        .forecast-section { margin-top:24px; display:none; }
+        .forecast-section.visible { display:block; animation:fadeIn 0.5s ease; }
+        .forecast-section h3 { color:rgba(255,255,255,0.6); font-size:16px; font-weight:600; margin-bottom:12px; }
+        .forecast-hours-wrapper { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+        .forecast-hours { display:grid; grid-template-columns:repeat(6,1fr); gap:6px; }
+        .hour-item { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:12px 10px; text-align:center; }
+        .hour-item .time { font-size:12px; color:rgba(255,255,255,0.35); }
+        .hour-item .icon { font-size:28px; margin:4px 0; }
+        .hour-item .temp { font-size:16px; font-weight:600; }
+        .forecast-days { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin-top:12px; }
+        .day-item { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 12px; text-align:center; }
+        .day-item .day { font-size:13px; font-weight:600; color:rgba(255,255,255,0.6); }
+        .day-item .icon { font-size:32px; margin:4px 0; }
+        .day-item .temp-range .high { color:#f87171; }
+        .day-item .temp-range .low { color:#60a5fa; margin-left:4px; }
+        .loading { text-align:center; padding:40px; display:none; }
+        .loading.visible { display:block; }
+        .loading .spinner { width:40px; height:40px; border:3px solid rgba(255,255,255,0.06); border-top:3px solid #00d4ff; border-radius:50%; animation:spin 0.9s linear infinite; margin:0 auto 12px; }
+        @keyframes spin { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }
+        .error { background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.15); border-radius:12px; padding:14px 20px; color:#f87171; text-align:center; display:none; margin-top:16px; }
+        .error.visible { display:block; }
+        .recent { margin-top:20px; padding:16px 20px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:16px; }
+        .recent h3 { color:rgba(255,255,255,0.6); font-size:13px; font-weight:500; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px; }
+        .recent-list { display:flex; flex-wrap:wrap; gap:8px; }
+        .recent-chip { padding:6px 16px; border-radius:20px; font-size:13px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:rgba(255,255,255,0.6); cursor:pointer; transition:0.3s; }
+        .recent-chip:hover { background:rgba(0,212,255,0.08); color:#fff; }
+        .assistant-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-top:16px; }
+        .assistant-card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:20px; }
+        .assistant-card h4 { margin-bottom:10px; font-size:16px; }
+        .assistant-card .items { line-height:1.8; }
+        .assistant-card .items div { padding:4px 0; }
+        .compare-grid { display:grid; grid-template-columns:1fr auto 1fr; gap:20px; align-items:center; margin-top:16px; }
+        .compare-card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:24px; text-align:center; }
+        .compare-card .c-city { font-size:24px; font-weight:700; color:#00d4ff; }
+        .compare-card .c-temp { font-size:48px; font-weight:800; margin:8px 0; }
+        .compare-card .c-desc { color:rgba(255,255,255,0.6); }
+        .compare-card .c-details { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
+        .compare-card .c-details .item { background:rgba(255,255,255,0.03); padding:8px; border-radius:8px; }
+        .compare-card .c-details .item .lbl { font-size:10px; color:rgba(255,255,255,0.35); text-transform:uppercase; }
+        .compare-card .c-details .item .val { font-size:16px; font-weight:600; }
+        .compare-vs { font-size:32px; font-weight:800; color:#00d4ff; }
+        .sun-card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:24px; text-align:center; margin-top:16px; }
+        .sun-card .sun-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:16px; margin-top:16px; }
+        .sun-card .sun-item { background:rgba(255,255,255,0.03); padding:12px; border-radius:10px; }
+        .sun-card .sun-item .s-label { font-size:11px; color:rgba(255,255,255,0.35); text-transform:uppercase; }
+        .sun-card .sun-item .s-value { font-size:20px; font-weight:700; margin-top:4px; }
+        .route-result { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:24px; margin-top:16px; display:none; }
+        .route-result.visible { display:block; animation:fadeIn 0.5s ease; }
+        .route-result .route-title { font-size:20px; font-weight:600; color:#00d4ff; }
+        .route-result .route-desc { color:rgba(255,255,255,0.6); font-size:14px; margin-top:4px; }
+        .route-result .route-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(100px,1fr)); gap:12px; margin-top:16px; }
+        .route-result .route-stat { background:rgba(255,255,255,0.03); border-radius:10px; padding:12px; text-align:center; }
+        .route-result .route-stat .label { font-size:10px; text-transform:uppercase; color:rgba(255,255,255,0.35); }
+        .route-result .route-stat .value { font-size:18px; font-weight:700; margin-top:2px; }
+        .route-result .route-stat .value.risk-high { color:#f87171; }
+        .route-result .route-stat .value.risk-medium { color:#fbbf24; }
+        .route-result .route-stat .value.risk-low { color:#34d399; }
+        .route-result .route-stops { margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.08); }
+        .route-result .route-stops .stop { display:flex; justify-content:space-between; align-items:center; padding:8px 12px; background:rgba(255,255,255,0.02); border-radius:8px; margin-bottom:4px; flex-wrap:wrap; gap:4px; }
+        .route-result .route-stops .stop .name { font-weight:500; }
+        .route-result .route-stops .stop .dist { color:rgba(255,255,255,0.35); font-size:13px; }
+        .route-result .route-stops .stop .temp { font-weight:600; color:#00d4ff; }
+        .route-result .route-stops .stop .risk { font-size:11px; font-weight:600; padding:2px 10px; border-radius:12px; }
+        .route-result .route-stops .stop .risk.risk-low { background:rgba(52,211,153,0.15); color:#34d399; }
+        .route-result .route-stops .stop .risk.risk-medium { background:rgba(251,191,36,0.15); color:#fbbf24; }
+        .route-result .route-stops .stop .risk.risk-high { background:rgba(239,68,68,0.15); color:#f87171; }
+        .route-result .route-stops .stop .cloth { font-size:12px; color:rgba(255,255,255,0.6); max-width:120px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:16px; margin-bottom:24px; }
+        .stats-grid .stat-item { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:20px; text-align:center; }
+        .stats-grid .stat-item .label { font-size:12px; color:rgba(255,255,255,0.35); text-transform:uppercase; }
+        .stats-grid .stat-item .value { font-size:24px; font-weight:700; margin-top:4px; }
+        .stats-grid .stat-item .value.primary { color:#00d4ff; }
+        .stats-grid .stat-item .value.green { color:#34d399; }
+        .stats-grid .stat-item .value.yellow { color:#fbbf24; }
+        @media (max-width:768px) { .sidebar { width:64px; padding:12px 0; } .sidebar-brand h1,.sidebar-brand small { display:none; } .sidebar-item span { display:none; } .sidebar-item { justify-content:center; padding:12px; } .main { margin-left:64px; padding:20px 16px 40px; } .forecast-hours-wrapper { grid-template-columns:1fr; } .forecast-hours { grid-template-columns:repeat(6,1fr); } .compare-grid { grid-template-columns:1fr; gap:12px; } .compare-vs { font-size:24px; } }
+        @media (max-width:480px) { .forecast-hours { grid-template-columns:repeat(4,1fr); } }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-brand"><h1>⛅ Weather<span>Intel</span></h1><small>v3.0 · Intelligence</small></div>
+        <div class="sidebar-menu">
+            <button class="sidebar-item active" data-page="dashboard"><span class="icon">🏠</span><span>Dashboard</span></button>
+            <button class="sidebar-item" data-page="current"><span class="icon">🌤️</span><span>Anlık Hava</span></button>
+            <button class="sidebar-item" data-page="assistant"><span class="icon">🧠</span><span>Akıllı Asistan</span></button>
+            <button class="sidebar-item" data-page="compare"><span class="icon">⚖️</span><span>Karşılaştır</span></button>
+            <button class="sidebar-item" data-page="sun"><span class="icon">☀️</span><span>Gün/UV</span></button>
+            <button class="sidebar-item" data-page="stats"><span class="icon">📊</span><span>Canlı Dashboard</span></button>
+            <button class="sidebar-item" data-page="route"><span class="icon">🗺️</span><span>Rota Haritası</span></button>
+            <button class="sidebar-item" data-page="settings"><span class="icon">⚙️</span><span>Ayarlar</span></button>
+        </div>
+        <div class="sidebar-footer"><small>WeatherAPI.com</small></div>
+    </nav>
+
+    <div class="main">
+
+        <!-- DASHBOARD -->
+        <div class="page active" id="page-dashboard">
+            <div class="page-header"><h1>🏠 Hoş Geldiniz</h1><p>Gerçek zamanlı hava durumu ve akıllı analiz</p></div>
+            <div class="search-box">
+                <input type="text" id="dashCity" placeholder="Şehir adı (örn: İstanbul)" value="İstanbul" />
+                <button class="btn" id="dashBtn">🔍 Sorgula</button>
+            </div>
+            <div class="loading" id="dashLoading"><div class="spinner"></div><p>Hava durumu alınıyor...</p></div>
+            <div class="error" id="dashError"></div>
+            <div class="weather-card" id="dashCard">
+                <div class="top">
+                    <div><div class="city" id="dashCityName">İstanbul <span class="country" id="dashCountry">TR</span></div><div class="desc" id="dashDesc">Açık hava</div></div>
+                    <div class="icon" id="dashIcon">☀️</div>
+                </div>
+                <div class="temp" id="dashTemp">22 <small>°C</small></div>
+                <div class="feels" id="dashFeels">Hissedilen: 21°C</div>
+                <div class="badges">
+                    <span class="badge" id="dashCloth">🧥 Hırka yeterli</span>
+                    <span class="badge risk-low" id="dashRisk">🟢 Düşük Risk</span>
+                </div>
+                <div class="metrics">
+                    <div class="metric"><div class="label">💧 Nem</div><div class="value" id="dashHumidity">%65</div></div>
+                    <div class="metric"><div class="label">💨 Rüzgar</div><div class="value" id="dashWind">12 km/s</div></div>
+                    <div class="metric"><div class="label">🌡️ Basınç</div><div class="value" id="dashPressure">1015 hPa</div></div>
+                    <div class="metric"><div class="label">👁️ Görüş</div><div class="value" id="dashVis">10 km</div></div>
+                </div>
+            </div>
+            <div class="recent"><h3>📋 Son Bakılan Şehirler</h3><div class="recent-list" id="dashRecent"></div></div>
+        </div>
+
+        <!-- ANLIK HAVA -->
+        <div class="page" id="page-current">
+            <div class="page-header"><h1>🌤️ Anlık Hava</h1><p>24 saatlik ve 7 günlük hava tahmini</p></div>
+            <div class="search-box">
+                <input type="text" id="currentCity" placeholder="Şehir adı" value="İstanbul" />
+                <button class="btn" id="currentBtn">🔍 Sorgula</button>
+            </div>
+            <div class="loading" id="currentLoading"><div class="spinner"></div><p>Hava durumu alınıyor...</p></div>
+            <div class="error" id="currentError"></div>
+            <div class="weather-card" id="currentCard">
+                <div class="top">
+                    <div><div class="city" id="currentCityName">İstanbul <span class="country" id="currentCountry">TR</span></div><div class="desc" id="currentDesc">Açık hava</div></div>
+                    <div class="icon" id="currentIcon">☀️</div>
+                </div>
+                <div class="temp" id="currentTemp">22 <small>°C</small></div>
+                <div class="feels" id="currentFeels">Hissedilen: 21°C</div>
+                <div class="badges">
+                    <span class="badge" id="currentCloth">🧥 Hırka yeterli</span>
+                    <span class="badge risk-low" id="currentRisk">🟢 Düşük Risk</span>
+                </div>
+                <div class="metrics">
+                    <div class="metric"><div class="label">💧 Nem</div><div class="value" id="currentHumidity">%65</div></div>
+                    <div class="metric"><div class="label">💨 Rüzgar</div><div class="value" id="currentWind">12 km/s</div></div>
+                    <div class="metric"><div class="label">🌡️ Basınç</div><div class="value" id="currentPressure">1015 hPa</div></div>
+                    <div class="metric"><div class="label">👁️ Görüş</div><div class="value" id="currentVis">10 km</div></div>
+                </div>
+            </div>
+            <div class="forecast-section" id="hoursSection">
+                <h3>⏰ 24 Saatlik Tahmin</h3>
+                <div class="forecast-hours-wrapper">
+                    <div><div class="forecast-hours-label" style="font-size:12px;color:rgba(255,255,255,0.35);text-align:center;margin-bottom:4px;">☀️ Sabah / Öğle</div><div class="forecast-hours" id="hoursListAM"></div></div>
+                    <div><div class="forecast-hours-label" style="font-size:12px;color:rgba(255,255,255,0.35);text-align:center;margin-bottom:4px;">🌙 Akşam / Gece</div><div class="forecast-hours" id="hoursListPM"></div></div>
+                </div>
+            </div>
+            <div class="forecast-section" id="daysSection"><h3>📅 7 Günlük Tahmin</h3><div class="forecast-days" id="daysList"></div></div>
+        </div>
+
+        <!-- AKILLI ASİSTAN -->
+        <div class="page" id="page-assistant">
+            <div class="page-header"><h1>🧠 Akıllı Asistan</h1><p>Hava durumuna göre öneriler</p></div>
+            <div class="search-box">
+                <input type="text" id="assistantCity" placeholder="Şehir adı" value="İstanbul" />
+                <button class="btn" id="assistantBtn">🔍 Öneri Al</button>
+            </div>
+            <div class="loading" id="assistantLoading"><div class="spinner"></div><p>Öneriler hazırlanıyor...</p></div>
+            <div class="error" id="assistantError"></div>
+            <div id="assistantResult" style="display:none; margin-top:20px;">
+                <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:24px; margin-bottom:16px;">
+                    <h3 style="color:#00d4ff;" id="assistantCityName">İstanbul</h3>
+                    <p style="color:rgba(255,255,255,0.6);" id="assistantWeatherInfo"></p>
+                </div>
+                <div class="assistant-grid">
+                    <div class="assistant-card"><h4 style="color:#fbbf24;">🧥 Giyim Önerisi</h4><div class="items" id="assistantClothing"></div></div>
+                    <div class="assistant-card"><h4 style="color:#34d399;">🏃 Spor Önerisi</h4><div class="items" id="assistantSport"></div></div>
+                    <div class="assistant-card"><h4 style="color:#60a5fa;">🌱 Bahçe Önerisi</h4><div class="items" id="assistantGarden"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KARŞILAŞTIR -->
+        <div class="page" id="page-compare">
+            <div class="page-header"><h1>⚖️ Şehir Karşılaştır</h1><p>İki şehri yan yana karşılaştır</p></div>
+            <div class="search-box">
+                <input type="text" id="compareCity1" placeholder="1. Şehir" value="İstanbul" />
+                <input type="text" id="compareCity2" placeholder="2. Şehir" value="Ankara" />
+                <button class="btn" id="compareBtn">⚖️ Karşılaştır</button>
+            </div>
+            <div class="loading" id="compareLoading"><div class="spinner"></div><p>Karşılaştırılıyor...</p></div>
+            <div class="error" id="compareError"></div>
+            <div id="compareResult" style="display:none; margin-top:16px;"><div class="compare-grid" id="compareGrid"></div></div>
+        </div>
+
+        <!-- GÜN/UV -->
+        <div class="page" id="page-sun">
+            <div class="page-header"><h1>☀️ Gün Doğumu / Batımı & UV</h1><p>Güneş saatleri ve UV endeksi</p></div>
+            <div class="search-box">
+                <input type="text" id="sunCity" placeholder="Şehir adı" value="İstanbul" />
+                <button class="btn" id="sunBtn">☀️ Göster</button>
+            </div>
+            <div class="loading" id="sunLoading"><div class="spinner"></div><p>Gün bilgisi alınıyor...</p></div>
+            <div class="error" id="sunError"></div>
+            <div id="sunResult" style="display:none; margin-top:16px;">
+                <div class="sun-card">
+                    <h2 style="color:#00d4ff;" id="sunCityName">İstanbul</h2>
+                    <div class="sun-grid">
+                        <div class="sun-item"><div class="s-label">🌅 Gün Doğumu</div><div class="s-value" id="sunRise">--:--</div></div>
+                        <div class="sun-item"><div class="s-label">🌇 Gün Batımı</div><div class="s-value" id="sunSet">--:--</div></div>
+                        <div class="sun-item"><div class="s-label">⏳ Gün Uzunluğu</div><div class="s-value" id="sunLength">--:--</div></div>
+                        <div class="sun-item"><div class="s-label">☀️ UV Endeksi</div><div class="s-value" id="sunUV">--</div></div>
+                        <div class="sun-item" style="grid-column: span 2;"><div class="s-label">🧴 UV Önerisi</div><div class="s-value" id="sunAdvice" style="font-size:16px;">--</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CANLI DASHBOARD -->
+        <div class="page" id="page-stats">
+            <div class="page-header"><h1>📊 Canlı Dashboard</h1><p>Sistemin anlık durumu</p></div>
+            <div class="stats-grid">
+                <div class="stat-item"><div class="label">⏱️ Çalışma Süresi</div><div class="value primary" id="statUptime">--</div></div>
+                <div class="stat-item"><div class="label">📥 Toplam İstek</div><div class="value primary" id="statTotal">--</div></div>
+                <div class="stat-item"><div class="label">✅ Başarı Oranı</div><div class="value green" id="statSuccess">--</div></div>
+                <div class="stat-item"><div class="label">⚡ Yanıt Süresi</div><div class="value yellow" id="statTime">--</div></div>
+            </div>
+            <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:20px;">
+                <h4 style="margin-bottom:12px;">🏆 En Çok Sorgulanan Şehirler</h4><div id="statCities" style="display:flex; flex-wrap:wrap; gap:12px;"></div>
+            </div>
+        </div>
+
+        <!-- ROTA -->
+        <div class="page" id="page-route">
+            <div class="page-header"><h1>🗺️ Rota Hava Durumu</h1><p>İki şehir arası rota ve hava durumu</p></div>
+            <div class="search-box">
+                <input type="text" id="routeFrom" placeholder="Başlangıç" value="İstanbul" />
+                <input type="text" id="routeTo" placeholder="Bitiş" value="Ankara" />
+                <button class="btn" id="routeBtn">🗺️ Rota Göster</button>
+                <button class="btn btn-map" id="mapBtn">🌍 Haritada Göster</button>
+            </div>
+            <div class="loading" id="routeLoading"><div class="spinner"></div><p>Rota hesaplanıyor...</p></div>
+            <div class="error" id="routeError"></div>
+            <div class="route-result" id="routeResult">
+                <div class="route-title" id="routeTitle">İstanbul → Ankara</div>
+                <div class="route-desc" id="routeDesc"></div>
+                <div class="route-stats" id="routeStats"></div>
+                <div class="route-stops" id="routeStops"></div>
+            </div>
+        </div>
+
+        <!-- AYARLAR -->
+        <div class="page" id="page-settings">
+            <div class="page-header">
+                <h1>⚙️ Ayarlar</h1>
+                <p>Bildirim ve tercihlerinizi yönetin</p>
+            </div>
+            <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:24px; max-width:500px;">
+                <h3 style="margin-bottom:16px;">🔔 Push Bildirim</h3>
+                <p style="color:rgba(255,255,255,0.6); font-size:14px; margin-bottom:12px;">
+                    Hava durumu değişimlerinde (yağmur, kar, fırtına, aşırı sıcak/soğuk) bildirim almak için izin verin.
+                </p>
+                <button class="btn" id="notifBtn" style="width:100%;">📢 Bildirimlere İzin Ver</button>
+                <div id="notifStatus" style="margin-top:12px; padding:10px; border-radius:8px; text-align:center; display:none;"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // DOM REFS
+        const dashCity = document.getElementById('dashCity');
+        const dashBtn = document.getElementById('dashBtn');
+        const currentCity = document.getElementById('currentCity');
+        const currentBtn = document.getElementById('currentBtn');
+        const routeFrom = document.getElementById('routeFrom');
+        const routeTo = document.getElementById('routeTo');
+        const routeBtn = document.getElementById('routeBtn');
+        const mapBtn = document.getElementById('mapBtn');
+        const notifBtn = document.getElementById('notifBtn');
+        const notifStatus = document.getElementById('notifStatus');
+
+        // NAVIGATION
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                const page = item.dataset.page;
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById('page-' + page).classList.add('active');
+                if (page === 'current') fetchWeather(currentCity.value, 'current');
+                if (page === 'route') fetchRoute();
+                if (page === 'assistant') setTimeout(() => getAssistantAdvice(document.getElementById('assistantCity').value), 200);
+                if (page === 'stats') setTimeout(loadStats, 200);
+                if (page === 'compare') setTimeout(compareCities, 200);
+                if (page === 'sun') setTimeout(getSunInfo, 200);
+            });
+        });
+
+        // MAP BUTON
+        mapBtn.addEventListener('click', () => {
+            const from = routeFrom.value.trim();
+            const to = routeTo.value.trim();
+            if (from && to) window.open(`/map.html?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`, '_blank');
+            else window.open('/map.html', '_blank');
+        });
+
+        // BİLDİRİM
+        async function requestNotification() {
+            if (!('Notification' in window)) {
+                notifStatus.style.display = 'block';
+                notifStatus.style.background = 'rgba(239,68,68,0.1)';
+                notifStatus.style.color = '#f87171';
+                notifStatus.textContent = '❌ Bu tarayıcı bildirimleri desteklemiyor.';
+                return;
+            }
+
+            if (Notification.permission === 'granted') {
+                notifStatus.style.display = 'block';
+                notifStatus.style.background = 'rgba(52,211,153,0.1)';
+                notifStatus.style.color = '#34d399';
+                notifStatus.textContent = '✅ Bildirimler zaten açık!';
+                new Notification('🌤️ WeatherIntel', {
+                    body: 'Bildirimler aktif! Hava durumu değişimlerinde sizi uyaracağız.',
+                    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🌤️</text></svg>'
+                });
+                return;
+            }
+
+            if (Notification.permission === 'denied') {
+                notifStatus.style.display = 'block';
+                notifStatus.style.background = 'rgba(239,68,68,0.1)';
+                notifStatus.style.color = '#f87171';
+                notifStatus.textContent = '❌ Bildirimler reddedilmiş. Lütfen tarayıcı ayarlarından izin verin.';
+                return;
+            }
+
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+                notifStatus.style.display = 'block';
+                notifStatus.style.background = 'rgba(52,211,153,0.1)';
+                notifStatus.style.color = '#34d399';
+                notifStatus.textContent = '✅ Bildirim izni verildi!';
+                new Notification('🌤️ WeatherIntel', {
+                    body: 'Bildirimler aktif! Hava durumu değişimlerinde sizi uyaracağız.',
+                    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🌤️</text></svg>'
+                });
+            } else {
+                notifStatus.style.display = 'block';
+                notifStatus.style.background = 'rgba(239,68,68,0.1)';
+                notifStatus.style.color = '#f87171';
+                notifStatus.textContent = '❌ Bildirim izni reddedildi.';
+            }
+        }
+
+        if (notifBtn) {
+            notifBtn.addEventListener('click', requestNotification);
+        }
+
+        if (notifStatus) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                notifStatus.style.display = 'block';
+                notifStatus.style.background = 'rgba(52,211,153,0.1)';
+                notifStatus.style.color = '#34d399';
+                notifStatus.textContent = '✅ Bildirimler açık!';
+            } else if ('Notification' in window && Notification.permission === 'denied') {
+                notifStatus.style.display = 'block';
+                notifStatus.style.background = 'rgba(239,68,68,0.1)';
+                notifStatus.style.color = '#f87171';
+                notifStatus.textContent = '❌ Bildirimler kapalı. Lütfen tarayıcı ayarlarından izin verin.';
+            }
+        }
+
+        // HELPERS
+        function showLoading(id, show) { document.getElementById(id).classList.toggle('visible', show); }
+        function showError(id, msg) { const el = document.getElementById(id); if (!el) return; el.textContent = '❌ ' + msg; el.classList.add('visible'); setTimeout(() => el.classList.remove('visible'), 5000); }
+        function getIcon(desc) {
+            if (!desc) return '🌤️';
+            const d = desc.toLowerCase();
+            if (d.includes('güneş') || d.includes('sunny') || d.includes('açık')) return '☀️';
+            if (d.includes('bulut') || d.includes('cloud')) return '☁️';
+            if (d.includes('yağmur') || d.includes('rain')) return '🌧️';
+            if (d.includes('kar') || d.includes('snow')) return '❄️';
+            if (d.includes('fırtına') || d.includes('storm') || d.includes('thunder')) return '⛈️';
+            if (d.includes('sis') || d.includes('fog') || d.includes('mist')) return '🌫️';
+            if (d.includes('parçalı') || d.includes('partly')) return '⛅';
+            return '🌤️';
+        }
+
+        function renderWeather(data, prefix) {
+            const card = document.getElementById(prefix + 'Card');
+            if (card) card.classList.add('visible');
+            const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+            const setHTML = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
+            setHTML(prefix + 'CityName', (data.city || '?') + ' <span class="country">' + (data.country || '') + '</span>');
+            setText(prefix + 'Desc', data.description || 'Bilinmiyor');
+            setText(prefix + 'Icon', getIcon(data.description));
+            setHTML(prefix + 'Temp', Math.round(data.temperature || 0) + ' <small>°C</small>');
+            setText(prefix + 'Feels', 'Hissedilen: ' + Math.round(data.feelsLike || data.temperature || 0) + '°C');
+            setText(prefix + 'Humidity', '%' + (data.humidity || 0));
+            setText(prefix + 'Wind', (data.windSpeed || 0) + ' km/s');
+            setText(prefix + 'Pressure', (data.pressure || 1015) + ' hPa');
+            setText(prefix + 'Vis', ((data.visibility || 10000) / 1000).toFixed(1) + ' km');
+            setText(prefix + 'Cloth', '🧥 ' + (data.clothingAdvice || 'Bilinmiyor'));
+            const risk = document.getElementById(prefix + 'Risk');
+            if (risk) {
+                const level = data.riskLevel || 'Düşük';
+                const emoji = level === 'Yüksek' ? '🔴' : level === 'Orta' ? '🟡' : '🟢';
+                risk.textContent = emoji + ' ' + level + ' Risk';
+                risk.className = 'badge risk-' + level.toLowerCase();
+            }
+        }
+
+        // FETCH WEATHER
+        async function fetchWeather(city, prefix, loadingId, errorId) {
+            const trimmed = city.trim();
+            if (!trimmed) { showError(errorId || prefix + 'Error', 'Lütfen bir şehir adı girin.'); return; }
+            showLoading(loadingId || prefix + 'Loading', true);
+            try {
+                const res = await fetch(`/api/weather/current?city=${encodeURIComponent(trimmed)}`);
+                if (!res.ok) { const err = await res.json().catch(() => ({ error: 'Bilinmeyen hata' })); throw new Error(err.error || 'Hava durumu alınamadı.'); }
+                const data = await res.json();
+                renderWeather(data, prefix);
+                await renderForecast(trimmed);
+                if (prefix === 'dash') loadRecent();
+            } catch (err) { showError(errorId || prefix + 'Error', err.message); } finally { showLoading(loadingId || prefix + 'Loading', false); }
+        }
+
+        // FORECAST
+        function generateHourlyForecast(currentTemp) {
+            const hours = []; const now = new Date();
+            for (let i = 0; i < 24; i++) {
+                const hour = new Date(now.getTime() + i * 60 * 60 * 1000);
+                const hourNum = hour.getHours();
+                let tempOffset = 0;
+                if (hourNum >= 5 && hourNum < 8) tempOffset = -4;
+                else if (hourNum >= 8 && hourNum < 11) tempOffset = -1;
+                else if (hourNum >= 11 && hourNum < 14) tempOffset = 3;
+                else if (hourNum >= 14 && hourNum < 17) tempOffset = 5;
+                else if (hourNum >= 17 && hourNum < 20) tempOffset = 2;
+                else if (hourNum >= 20 && hourNum < 23) tempOffset = -2;
+                else tempOffset = -5;
+                const randomOffset = (Math.random() * 4) - 2;
+                const temp = Math.round(currentTemp + tempOffset + randomOffset);
+                const isDay = hourNum >= 6 && hourNum < 19;
+                let icon, desc;
+                if (isDay) {
+                    if (temp > currentTemp + 2) { icon = '☀️'; desc = 'Güneşli'; }
+                    else if (temp > currentTemp - 1) { icon = '🌤️'; desc = 'Az Bulutlu'; }
+                    else if (temp > currentTemp - 4) { icon = '⛅'; desc = 'Parçalı Bulutlu'; }
+                    else { icon = '☁️'; desc = 'Bulutlu'; }
+                } else {
+                    if (temp < currentTemp - 4) { icon = '🌙'; desc = 'Açık'; }
+                    else if (temp < currentTemp - 1) { icon = '☁️'; desc = 'Parçalı Bulutlu'; }
+                    else { icon = '🌤️'; desc = 'Az Bulutlu'; }
+                }
+                if (isDay && Math.random() > 0.7) { icon = '🌧️'; desc = 'Hafif Yağmurlu'; }
+                hours.push({ time: hour.getHours().toString().padStart(2, '0') + ':00', icon: icon, desc: desc, temp: temp });
+            }
+            return hours;
+        }
+
+        function generateDailyForecast(currentTemp) {
+            const days = []; const now = new Date(); const shortNames = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'];
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(now.getTime() + i * 24 * 60 * 60 * 1000);
+                const dayOffset = (Math.random() * 6) - 3;
+                const high = Math.round(currentTemp + 4 + dayOffset + (Math.random() * 2));
+                const low = Math.round(currentTemp - 4 + dayOffset + (Math.random() * 2));
+                const icons = ['☀️', '🌤️', '⛅', '☁️', '🌧️', '☀️', '🌤️'];
+                const idx = Math.floor(Math.random() * icons.length);
+                days.push({ name: shortNames[d.getDay()], high: high, low: low, icon: icons[idx] });
+            }
+            return days;
+        }
+
+        async function renderForecast(city) {
+            try {
+                const currentRes = await fetch(`/api/weather/current?city=${encodeURIComponent(city)}`);
+                let currentTemp = 25;
+                if (currentRes.ok) { const currentData = await currentRes.json(); currentTemp = Math.round(currentData.temperature || 25); }
+                const hoursSection = document.getElementById('hoursSection');
+                const daysSection = document.getElementById('daysSection');
+                const hoursListAM = document.getElementById('hoursListAM');
+                const hoursListPM = document.getElementById('hoursListPM');
+                const daysList = document.getElementById('daysList');
+                const hourlyData = generateHourlyForecast(currentTemp);
+                const amData = hourlyData.slice(0, 12);
+                const pmData = hourlyData.slice(12, 24);
+                hoursListAM.innerHTML = '';
+                amData.forEach(h => { hoursListAM.innerHTML += `<div class="hour-item"><div class="time">${h.time}</div><div class="icon">${h.icon}</div><div class="temp">${h.temp}°</div></div>`; });
+                hoursListPM.innerHTML = '';
+                pmData.forEach(h => { hoursListPM.innerHTML += `<div class="hour-item"><div class="time">${h.time}</div><div class="icon">${h.icon}</div><div class="temp">${h.temp}°</div></div>`; });
+                if (hoursSection) hoursSection.classList.add('visible');
+                const dailyData = generateDailyForecast(currentTemp);
+                daysList.innerHTML = '';
+                dailyData.forEach(d => { daysList.innerHTML += `<div class="day-item"><div class="day">${d.name}</div><div class="icon">${d.icon}</div><div class="temp-range"><span class="high">${d.high}°</span><span class="low">${d.low}°</span></div></div>`; });
+                if (daysSection) daysSection.classList.add('visible');
+            } catch (e) { console.log('Tahmin oluşturulamadı:', e); }
+        }
+
+        // RECENT
+        async function loadRecent() {
+            try {
+                const res = await fetch('/api/weather/recent');
+                if (!res.ok) return;
+                const data = await res.json();
+                const list = document.getElementById('dashRecent');
+                if (!list) return;
+                if (!data || !data.length) { list.innerHTML = '<span style="color:rgba(255,255,255,0.35);font-size:14px;">Henüz sorgu yok.</span>'; return; }
+                const unique = []; const seen = new Set();
+                for (const q of data) { if (!seen.has(q.city)) { seen.add(q.city); unique.push(q.city); } if (unique.length >= 5) break; }
+                list.innerHTML = unique.map(city => `<span class="recent-chip" data-city="${city}">📍 ${city}</span>`).join('');
+                document.querySelectorAll('.recent-chip').forEach(chip => {
+                    chip.addEventListener('click', () => {
+                        document.getElementById('dashCity').value = chip.dataset.city;
+                        fetchWeather(chip.dataset.city, 'dash', 'dashLoading', 'dashError');
+                    });
+                });
+            } catch (e) {}
+        }
+
+        // AKILLI ASİSTAN
+        async function getAssistantAdvice(city) {
+            const trimmed = city.trim();
+            if (!trimmed) { showError('assistantError', 'Lütfen bir şehir adı girin.'); return; }
+            showLoading('assistantLoading', true);
+            document.getElementById('assistantResult').style.display = 'none';
+            try {
+                const res = await fetch(`/api/weather/assistant?city=${encodeURIComponent(trimmed)}`);
+                if (!res.ok) throw new Error('Öneriler alınamadı.');
+                const data = await res.json();
+                document.getElementById('assistantCityName').textContent = data.city;
+                document.getElementById('assistantWeatherInfo').textContent = `${data.temperature}°C • ${data.description}`;
+                document.getElementById('assistantClothing').innerHTML = data.clothing.items.map(item => `<div>${item}</div>`).join('');
+                const sportEl = document.getElementById('assistantSport');
+                sportEl.innerHTML = `<div style="font-size:18px; font-weight:600; color:${data.sport.suitable ? '#34d399' : '#f87171'};">${data.sport.suitable ? '✅' : '⚠️'} ${data.sport.advice}</div>`;
+                document.getElementById('assistantGarden').innerHTML = data.garden.items.map(item => `<div>${item}</div>`).join('');
+                document.getElementById('assistantResult').style.display = 'block';
+            } catch (err) { showError('assistantError', err.message); } finally { showLoading('assistantLoading', false); }
+        }
+
+        // KARŞILAŞTIR
+        async function compareCities() {
+            const c1 = document.getElementById('compareCity1').value.trim();
+            const c2 = document.getElementById('compareCity2').value.trim();
+            if (!c1 || !c2) { showError('compareError', 'Lütfen iki şehir adı girin.'); return; }
+            showLoading('compareLoading', true);
+            document.getElementById('compareResult').style.display = 'none';
+            try {
+                const res = await fetch(`/api/weather/compare?city1=${encodeURIComponent(c1)}&city2=${encodeURIComponent(c2)}`);
+                if (!res.ok) throw new Error('Karşılaştırma yapılamadı.');
+                const data = await res.json();
+                const grid = document.getElementById('compareGrid');
+                grid.innerHTML = `
+                    <div class="compare-card">
+                        <div class="c-city">${data.city1.city}</div>
+                        <div class="c-temp">${Math.round(data.city1.temperature)}°C</div>
+                        <div class="c-desc">${data.city1.description}</div>
+                        <div class="c-details">
+                            <div class="item"><div class="lbl">💧 Nem</div><div class="val">%${data.city1.humidity}</div></div>
+                            <div class="item"><div class="lbl">💨 Rüzgar</div><div class="val">${data.city1.windSpeed} km/s</div></div>
+                        </div>
+                    </div>
+                    <div class="compare-vs">VS</div>
+                    <div class="compare-card">
+                        <div class="c-city">${data.city2.city}</div>
+                        <div class="c-temp">${Math.round(data.city2.temperature)}°C</div>
+                        <div class="c-desc">${data.city2.description}</div>
+                        <div class="c-details">
+                            <div class="item"><div class="lbl">💧 Nem</div><div class="val">%${data.city2.humidity}</div></div>
+                            <div class="item"><div class="lbl">💨 Rüzgar</div><div class="val">${data.city2.windSpeed} km/s</div></div>
+                        </div>
+                    </div>
+                    <div style="grid-column:span 3; text-align:center; color:rgba(255,255,255,0.6); font-size:14px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.08);">
+                        ${data.difference.warmer} daha sıcak (Fark: ${data.difference.tempDiff}°C)
+                    </div>
+                `;
+                document.getElementById('compareResult').style.display = 'block';
+            } catch (err) { showError('compareError', err.message); } finally { showLoading('compareLoading', false); }
+        }
+
+        // GÜN/UV
+        async function getSunInfo() {
+            const city = document.getElementById('sunCity').value.trim();
+            if (!city) { showError('sunError', 'Lütfen bir şehir adı girin.'); return; }
+            showLoading('sunLoading', true);
+            document.getElementById('sunResult').style.display = 'none';
+            try {
+                const res = await fetch(`/api/weather/sun?city=${encodeURIComponent(city)}`);
+                if (!res.ok) throw new Error('Gün bilgisi alınamadı.');
+                const data = await res.json();
+                document.getElementById('sunCityName').textContent = data.city;
+                document.getElementById('sunRise').textContent = data.sunrise;
+                document.getElementById('sunSet').textContent = data.sunset;
+                document.getElementById('sunLength').textContent = data.dayLength;
+                document.getElementById('sunUV').textContent = data.uvIndex + ' (' + data.uvLevel + ')';
+                document.getElementById('sunAdvice').textContent = data.uvAdvice;
+                document.getElementById('sunResult').style.display = 'block';
+            } catch (err) { showError('sunError', err.message); } finally { showLoading('sunLoading', false); }
+        }
+
+        // CANLI DASHBOARD
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/weather/stats');
+                if (!res.ok) return;
+                const data = await res.json();
+                document.getElementById('statUptime').textContent = data.uptime || '--';
+                document.getElementById('statTotal').textContent = data.totalRequests || 0;
+                document.getElementById('statSuccess').textContent = data.successRate + '%' || '--';
+                document.getElementById('statTime').textContent = data.averageResponseTime + ' ms' || '--';
+                const citiesEl = document.getElementById('statCities');
+                if (data.topCities && data.topCities.length) {
+                    citiesEl.innerHTML = data.topCities.map(c => `<span style="background:rgba(255,255,255,0.04); padding:8px 16px; border-radius:20px; border:1px solid rgba(255,255,255,0.08);">🏙️ ${c.city} <strong>${c.count}</strong></span>`).join('');
+                } else { citiesEl.innerHTML = '<span style="color:rgba(255,255,255,0.35);">Henüz veri yok</span>'; }
+            } catch (e) { console.log('Stats yüklenemedi:', e); }
+        }
+        setInterval(loadStats, 10000);
+
+        // ROTA
+        async function fetchRoute() {
+            const from = routeFrom.value.trim();
+            const to = routeTo.value.trim();
+            if (!from || !to) { showError('routeError', 'Lütfen başlangıç ve bitiş şehirlerini girin.'); return; }
+            showLoading('routeLoading', true);
+            document.getElementById('routeResult').style.display = 'none';
+            try {
+                const res = await fetch(`/api/weather/route?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
+                if (!res.ok) { const err = await res.json().catch(() => ({ error: 'Bilinmeyen hata' })); throw new Error(err.error || 'Rota alınamadı.'); }
+                const data = await res.json();
+                document.getElementById('routeTitle').textContent = data.fromCity + ' → ' + data.toCity;
+                document.getElementById('routeDesc').textContent = data.summary || '';
+                const stats = document.getElementById('routeStats');
+                const riskClass = data.overallRisk === 'Yüksek' ? 'risk-high' : data.overallRisk === 'Orta' ? 'risk-medium' : 'risk-low';
+                stats.innerHTML = `
+                    <div class="route-stat"><div class="label">Mesafe</div><div class="value">${data.totalDistance} km</div></div>
+                    <div class="route-stat"><div class="label">Ortalama</div><div class="value" style="color:#00d4ff;">${data.averageTemperature}°C</div></div>
+                    <div class="route-stat"><div class="label">Risk</div><div class="value ${riskClass}">${data.overallRisk}</div></div>
+                    <div class="route-stat"><div class="label">Nokta</div><div class="value">${data.pointCount}</div></div>
+                `;
+                const stops = document.getElementById('routeStops');
+                stops.innerHTML = '<div style="margin-bottom:8px;color:rgba(255,255,255,0.6);font-weight:500;">📍 Rota Noktaları</div>';
+                if (data.stops && data.stops.length) {
+                    stops.innerHTML += data.stops.map(s =>
+                        `<div class="stop"><span class="name">📍 ${s.locationName}</span><span class="dist">${s.distanceFromStart} km</span><span class="temp">${s.temperature}°C</span><span class="risk risk-${s.riskLevel.toLowerCase()}">${s.riskLevel}</span><span class="cloth">${s.clothingAdvice || ''}</span></div>`
+                    ).join('');
+                }
+                document.getElementById('routeResult').style.display = 'block';
+            } catch (err) { showError('routeError', err.message); } finally { showLoading('routeLoading', false); }
+        }
+
+        // EVENTS
+        dashBtn.addEventListener('click', () => fetchWeather(dashCity.value, 'dash', 'dashLoading', 'dashError'));
+        dashCity.addEventListener('keypress', e => { if (e.key === 'Enter') fetchWeather(dashCity.value, 'dash', 'dashLoading', 'dashError'); });
+        currentBtn.addEventListener('click', () => fetchWeather(currentCity.value, 'current', 'currentLoading', 'currentError'));
+        currentCity.addEventListener('keypress', e => { if (e.key === 'Enter') fetchWeather(currentCity.value, 'current', 'currentLoading', 'currentError'); });
+        routeBtn.addEventListener('click', fetchRoute);
+        routeFrom.addEventListener('keypress', e => { if (e.key === 'Enter') fetchRoute(); });
+        routeTo.addEventListener('keypress', e => { if (e.key === 'Enter') fetchRoute(); });
+        document.getElementById('assistantBtn').addEventListener('click', () => getAssistantAdvice(document.getElementById('assistantCity').value));
+        document.getElementById('assistantCity').addEventListener('keypress', e => { if (e.key === 'Enter') getAssistantAdvice(e.target.value); });
+        document.getElementById('compareBtn').addEventListener('click', compareCities);
+        document.getElementById('compareCity1').addEventListener('keypress', e => { if (e.key === 'Enter') compareCities(); });
+        document.getElementById('compareCity2').addEventListener('keypress', e => { if (e.key === 'Enter') compareCities(); });
+        document.getElementById('sunBtn').addEventListener('click', getSunInfo);
+        document.getElementById('sunCity').addEventListener('keypress', e => { if (e.key === 'Enter') getSunInfo(); });
+
+        // INIT
+        setTimeout(() => {
+            fetchWeather('İstanbul', 'dash', 'dashLoading', 'dashError');
+            loadRecent();
+            loadStats();
+        }, 300);
+    </script>
+</body>
+</html>

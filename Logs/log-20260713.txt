@@ -1,0 +1,474 @@
+2026-07-13 13:19:04.874 +03:00 [INF] Application is shutting down...
+2026-07-13 13:26:50.496 +03:00 [INF] Now listening on: http://localhost:5111
+2026-07-13 13:26:50.521 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-13 13:26:50.522 +03:00 [INF] Hosting environment: Development
+2026-07-13 13:26:50.523 +03:00 [INF] Content root path: C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform
+2026-07-13 13:27:18.286 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-07-13 13:30:07.451 +03:00 [ERR] Hava durumu servisine ulaşılamadı
+System.Net.Http.HttpRequestException: Bilinen böyle bir ana bilgisayar yok. (api.openweathermap.org:443)
+ ---> System.Net.Sockets.SocketException (11001): Bilinen böyle bir ana bilgisayar yok.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.InjectNewHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingScopeHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at WeatherIntelligencePlatform.Services.GeocodingService.GetCoordinatesAsync(String cityName) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\GeocodingService.cs:line 21
+   at WeatherIntelligencePlatform.Services.RouteWeatherService.GetRouteWeatherAsync(String fromCity, String toCity) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\RouteWeatherService.cs:line 23
+   at WeatherIntelligencePlatform.Controllers.WeatherController.GetRouteWeather(String from, String to) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Controllers\WeatherController.cs:line 36
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at WeatherIntelligencePlatform.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Middlewares\ExceptionMiddleware.cs:line 21
+2026-07-13 13:30:15.725 +03:00 [ERR] Hava durumu servisine ulaşılamadı
+System.Net.Http.HttpRequestException: Bilinen böyle bir ana bilgisayar yok. (api.openweathermap.org:443)
+ ---> System.Net.Sockets.SocketException (11001): Bilinen böyle bir ana bilgisayar yok.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.InjectNewHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingScopeHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at WeatherIntelligencePlatform.Services.GeocodingService.GetCoordinatesAsync(String cityName) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\GeocodingService.cs:line 21
+   at WeatherIntelligencePlatform.Services.RouteWeatherService.GetRouteWeatherAsync(String fromCity, String toCity) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\RouteWeatherService.cs:line 23
+   at WeatherIntelligencePlatform.Controllers.WeatherController.GetRouteWeather(String from, String to) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Controllers\WeatherController.cs:line 36
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at WeatherIntelligencePlatform.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Middlewares\ExceptionMiddleware.cs:line 21
+2026-07-13 13:30:22.138 +03:00 [ERR] Hava durumu servisine ulaşılamadı
+System.Net.Http.HttpRequestException: Bilinen böyle bir ana bilgisayar yok. (api.openweathermap.org:443)
+ ---> System.Net.Sockets.SocketException (11001): Bilinen böyle bir ana bilgisayar yok.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.InjectNewHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingScopeHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at WeatherIntelligencePlatform.Services.GeocodingService.GetCoordinatesAsync(String cityName) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\GeocodingService.cs:line 21
+   at WeatherIntelligencePlatform.Services.RouteWeatherService.GetRouteWeatherAsync(String fromCity, String toCity) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\RouteWeatherService.cs:line 23
+   at WeatherIntelligencePlatform.Controllers.WeatherController.GetRouteWeather(String from, String to) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Controllers\WeatherController.cs:line 36
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at WeatherIntelligencePlatform.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Middlewares\ExceptionMiddleware.cs:line 21
+2026-07-13 13:30:31.999 +03:00 [ERR] Hava durumu servisine ulaşılamadı
+System.Net.Http.HttpRequestException: Bilinen böyle bir ana bilgisayar yok. (api.openweathermap.org:443)
+ ---> System.Net.Sockets.SocketException (11001): Bilinen böyle bir ana bilgisayar yok.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.InjectNewHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingScopeHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at WeatherIntelligencePlatform.Services.GeocodingService.GetCoordinatesAsync(String cityName) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\GeocodingService.cs:line 21
+   at WeatherIntelligencePlatform.Services.RouteWeatherService.GetRouteWeatherAsync(String fromCity, String toCity) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\RouteWeatherService.cs:line 23
+   at WeatherIntelligencePlatform.Controllers.WeatherController.GetRouteWeather(String from, String to) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Controllers\WeatherController.cs:line 36
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at WeatherIntelligencePlatform.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Middlewares\ExceptionMiddleware.cs:line 21
+2026-07-13 13:30:38.438 +03:00 [ERR] Hava durumu servisine ulaşılamadı
+System.Net.Http.HttpRequestException: Bilinen böyle bir ana bilgisayar yok. (api.openweathermap.org:443)
+ ---> System.Net.Sockets.SocketException (11001): Bilinen böyle bir ana bilgisayar yok.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.InjectNewHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingScopeHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at WeatherIntelligencePlatform.Services.GeocodingService.GetCoordinatesAsync(String cityName) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\GeocodingService.cs:line 21
+   at WeatherIntelligencePlatform.Services.RouteWeatherService.GetRouteWeatherAsync(String fromCity, String toCity) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\RouteWeatherService.cs:line 23
+   at WeatherIntelligencePlatform.Controllers.WeatherController.GetRouteWeather(String from, String to) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Controllers\WeatherController.cs:line 36
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at WeatherIntelligencePlatform.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Middlewares\ExceptionMiddleware.cs:line 21
+2026-07-13 13:46:01.462 +03:00 [INF] Application is shutting down...
+2026-07-13 13:46:29.919 +03:00 [INF] Now listening on: http://localhost:5111
+2026-07-13 13:46:29.941 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-13 13:46:29.941 +03:00 [INF] Hosting environment: Development
+2026-07-13 13:46:29.942 +03:00 [INF] Content root path: C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform
+2026-07-13 13:46:54.154 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-07-13 13:46:55.236 +03:00 [INF] Executed DbCommand (9ms) [Parameters=[@p0='?' (Size = 16), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-13 13:52:11.818 +03:00 [INF] Application is shutting down...
+2026-07-13 13:52:32.951 +03:00 [INF] Now listening on: http://localhost:5111
+2026-07-13 13:52:32.972 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-13 13:52:32.973 +03:00 [INF] Hosting environment: Development
+2026-07-13 13:52:32.973 +03:00 [INF] Content root path: C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform
+2026-07-13 13:52:58.867 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-07-13 13:52:59.794 +03:00 [INF] Executed DbCommand (9ms) [Parameters=[@p0='?' (Size = 16), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-13 13:59:45.474 +03:00 [INF] Application is shutting down...
+2026-07-13 14:00:01.511 +03:00 [INF] Now listening on: http://localhost:5111
+2026-07-13 14:00:01.563 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-13 14:00:01.564 +03:00 [INF] Hosting environment: Development
+2026-07-13 14:00:01.565 +03:00 [INF] Content root path: C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform
+2026-07-13 14:00:26.477 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-07-13 14:00:28.437 +03:00 [INF] Executed DbCommand (24ms) [Parameters=[@p0='?' (Size = 16), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-13 14:01:42.621 +03:00 [INF] Application is shutting down...
+2026-07-13 14:01:50.556 +03:00 [INF] Now listening on: http://localhost:5111
+2026-07-13 14:01:50.618 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-13 14:01:50.620 +03:00 [INF] Hosting environment: Development
+2026-07-13 14:01:50.622 +03:00 [INF] Content root path: C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform
+2026-07-13 14:04:29.288 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-07-13 14:04:31.286 +03:00 [INF] Executed DbCommand (25ms) [Parameters=[@p0='?' (Size = 16), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-13 14:31:53.871 +03:00 [INF] Application is shutting down...
+2026-07-13 16:14:20.371 +03:00 [INF] Now listening on: http://localhost:5111
+2026-07-13 16:14:20.426 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-13 16:14:20.428 +03:00 [INF] Hosting environment: Development
+2026-07-13 16:14:20.429 +03:00 [INF] Content root path: C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform
+2026-07-13 16:15:40.430 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-07-13 16:37:51.849 +03:00 [INF] Application is shutting down...
+2026-07-13 16:40:57.567 +03:00 [INF] Now listening on: http://localhost:5111
+2026-07-13 16:40:57.630 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-13 16:40:57.632 +03:00 [INF] Hosting environment: Development
+2026-07-13 16:40:57.636 +03:00 [INF] Content root path: C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform
+2026-07-13 16:41:12.367 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-07-13 16:41:19.291 +03:00 [INF] Hava durumu OpenWeather sağlayıcısından alındı: kayseri
+2026-07-13 16:41:21.829 +03:00 [INF] Executed DbCommand (46ms) [Parameters=[@p0='?' (Size = 16), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-13 16:55:56.887 +03:00 [INF] Application is shutting down...
+2026-07-13 17:22:52.959 +03:00 [INF] Now listening on: http://localhost:5111
+2026-07-13 17:22:52.983 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-13 17:22:52.984 +03:00 [INF] Hosting environment: Development
+2026-07-13 17:22:52.984 +03:00 [INF] Content root path: C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform
+2026-07-13 17:27:08.427 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-07-13 17:37:54.420 +03:00 [INF] Application is shutting down...
+2026-07-13 17:38:02.076 +03:00 [INF] Now listening on: http://localhost:5111
+2026-07-13 17:38:02.096 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-13 17:38:02.096 +03:00 [INF] Hosting environment: Development
+2026-07-13 17:38:02.097 +03:00 [INF] Content root path: C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform
+2026-07-13 17:38:41.861 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-07-13 17:47:25.907 +03:00 [INF] Application is shutting down...
+2026-07-13 17:47:33.126 +03:00 [INF] Now listening on: http://localhost:5111
+2026-07-13 17:47:33.148 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-13 17:47:33.149 +03:00 [INF] Hosting environment: Development
+2026-07-13 17:47:33.149 +03:00 [INF] Content root path: C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform
+2026-07-13 17:47:44.991 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-07-13 17:56:05.504 +03:00 [INF] Application is shutting down...
+2026-07-13 17:56:14.090 +03:00 [INF] Now listening on: http://localhost:5111
+2026-07-13 17:56:14.110 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-13 17:56:14.111 +03:00 [INF] Hosting environment: Development
+2026-07-13 17:56:14.111 +03:00 [INF] Content root path: C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform
+2026-07-13 17:57:07.313 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-07-13 17:57:17.340 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+2026-07-13 17:57:22.743 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+2026-07-13 18:06:47.077 +03:00 [INF] Application is shutting down...
+2026-07-13 18:13:57.716 +03:00 [INF] Now listening on: http://localhost:5111
+2026-07-13 18:13:57.737 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-13 18:13:57.738 +03:00 [INF] Hosting environment: Development
+2026-07-13 18:13:57.738 +03:00 [INF] Content root path: C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform
+2026-07-13 18:14:25.243 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-07-13 18:14:25.792 +03:00 [INF] Executed DbCommand (9ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+LIMIT @__p_0
+2026-07-13 18:14:46.731 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+LIMIT @__p_0
+2026-07-13 18:23:09.873 +03:00 [INF] Application is shutting down...
+2026-07-13 18:23:16.317 +03:00 [INF] Now listening on: http://localhost:5111
+2026-07-13 18:23:16.337 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-13 18:23:16.339 +03:00 [INF] Hosting environment: Development
+2026-07-13 18:23:16.339 +03:00 [INF] Content root path: C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform
+2026-07-13 18:24:30.959 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-07-13 18:24:36.455 +03:00 [INF] Hava durumu OpenWeather sağlayıcısından alındı: İstanbul
+2026-07-13 18:24:36.743 +03:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+2026-07-13 18:24:36.745 +03:00 [INF] Executed DbCommand (10ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+LIMIT @__p_0
+2026-07-13 18:24:36.840 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "WeatherQueryLogs"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-07-13 18:24:36.843 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "WeatherQueryLogs"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-07-13 18:24:36.844 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "WeatherQueryLogs"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-07-13 18:24:36.845 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "WeatherQueryLogs"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-07-13 18:24:36.847 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "WeatherQueryLogs"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-07-13 18:24:36.847 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "WeatherQueryLogs"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-07-13 18:24:36.848 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "WeatherQueryLogs"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-07-13 18:24:36.849 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "WeatherQueryLogs"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-07-13 18:24:36.850 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "WeatherQueryLogs"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-07-13 18:24:36.851 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "WeatherQueryLogs"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-07-13 18:24:36.852 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "WeatherQueryLogs"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-07-13 18:24:36.853 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "WeatherQueryLogs"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-07-13 18:24:36.857 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 8), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-13 18:24:36.930 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+LIMIT @__p_0
+2026-07-13 18:24:47.753 +03:00 [WRN] OpenWeather sağlayıcısı başarısız oldu, sıradaki sağlayıcıya geçiliyor.
+System.Net.Http.HttpRequestException: Response status code does not indicate success: 404 (Not Found).
+   at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()
+   at WeatherIntelligencePlatform.Services.OpenWeatherService.GetWeatherByCityAsync(String city) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\OpenWeatherService.cs:line 22
+   at WeatherIntelligencePlatform.Services.Providers.OpenWeatherProvider.GetWeatherAsync(String city) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\Providers\OpenWeatherProvider.cs:line 17
+   at WeatherIntelligencePlatform.Services.WeatherProviderOrchestrator.GetWeatherAsync(String city) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\Providers\WeatherProviderOrchestrator.cs:line 28
+2026-07-13 18:24:48.584 +03:00 [WRN] Open-Meteo sağlayıcısı başarısız oldu, sıradaki sağlayıcıya geçiliyor.
+System.Net.Http.HttpRequestException: Response status code does not indicate success: 400 (Bad Request).
+   at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()
+   at WeatherIntelligencePlatform.Services.Providers.OpenMeteoProvider.GetWeatherAsync(String city) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\Providers\OpenMeteoProvider.cs:line 36
+   at WeatherIntelligencePlatform.Services.WeatherProviderOrchestrator.GetWeatherAsync(String city) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\Providers\WeatherProviderOrchestrator.cs:line 28
+2026-07-13 18:24:48.585 +03:00 [ERR] Tüm hava durumu sağlayıcıları başarısız oldu: Devel
+2026-07-13 18:24:48.586 +03:00 [ERR] Current weather sorgusu başarısız: Devel
+System.Exception: Tüm hava durumu sağlayıcıları başarısız oldu.
+ ---> System.Net.Http.HttpRequestException: Response status code does not indicate success: 400 (Bad Request).
+   at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()
+   at WeatherIntelligencePlatform.Services.Providers.OpenMeteoProvider.GetWeatherAsync(String city) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\Providers\OpenMeteoProvider.cs:line 36
+   at WeatherIntelligencePlatform.Services.WeatherProviderOrchestrator.GetWeatherAsync(String city) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\Providers\WeatherProviderOrchestrator.cs:line 28
+   --- End of inner exception stack trace ---
+   at WeatherIntelligencePlatform.Services.WeatherProviderOrchestrator.GetWeatherAsync(String city) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\Providers\WeatherProviderOrchestrator.cs:line 40
+   at WeatherIntelligencePlatform.Services.WeatherBusinessService.GetWeatherAsync(String city) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Services\WeatherBusinessService.cs:line 42
+   at WeatherIntelligencePlatform.Controllers.WeatherController.GetCurrentWeather(String city) in C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform\Controllers\WeatherController.cs:line 34
+2026-07-13 18:24:52.799 +03:00 [INF] Hava durumu OpenWeather sağlayıcısından alındı: Develi
+2026-07-13 18:24:52.800 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+2026-07-13 18:24:52.803 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "WeatherQueryLogs"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-07-13 18:24:52.804 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 6), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-13 18:24:52.811 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+LIMIT @__p_0
+2026-07-13 18:34:47.290 +03:00 [INF] Executed DbCommand (7ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+LIMIT @__p_0
+2026-07-13 18:34:47.604 +03:00 [INF] Hava durumu OpenWeather sağlayıcısından alındı: İstanbul
+2026-07-13 18:34:47.647 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+2026-07-13 18:34:47.709 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "WeatherQueryLogs"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-07-13 18:34:47.775 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 8), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-13 18:34:48.011 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+LIMIT @__p_0
+2026-07-13 18:35:02.094 +03:00 [INF] Hava durumu OpenWeather sağlayıcısından alındı: peru
+2026-07-13 18:35:02.112 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+2026-07-13 18:35:02.163 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "WeatherQueryLogs"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-07-13 18:35:02.195 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-13 18:35:02.242 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+LIMIT @__p_0
+2026-07-13 18:35:26.123 +03:00 [INF] Hava durumu OpenWeather sağlayıcısından alındı: norveç
+2026-07-13 18:35:26.154 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+2026-07-13 18:35:26.205 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "WeatherQueryLogs"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-07-13 18:35:26.257 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 6), @p1='?' (Size = 15), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-13 18:35:26.329 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+LIMIT @__p_0
+2026-07-13 18:36:12.038 +03:00 [INF] Hava durumu OpenWeather sağlayıcısından alındı: ankara
+2026-07-13 18:36:12.220 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+2026-07-13 18:36:12.302 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "WeatherQueryLogs"
+WHERE "Id" = @p0
+RETURNING 1;
+2026-07-13 18:36:12.325 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 6), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-13 18:36:12.382 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+LIMIT @__p_0
+2026-07-13 18:38:20.230 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC
+2026-07-13 18:38:25.794 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC

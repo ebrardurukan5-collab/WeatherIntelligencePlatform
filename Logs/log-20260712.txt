@@ -1,0 +1,66 @@
+2026-07-12 14:00:49.368 +03:00 [INF] Now listening on: http://localhost:5111
+2026-07-12 14:00:49.555 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-12 14:00:49.568 +03:00 [INF] Hosting environment: Development
+2026-07-12 14:00:49.575 +03:00 [INF] Content root path: C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform
+2026-07-12 14:00:55.937 +03:00 [INF] Application is shutting down...
+2026-07-12 14:01:40.701 +03:00 [INF] Now listening on: http://localhost:5111
+2026-07-12 14:01:40.758 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-12 14:01:40.761 +03:00 [INF] Hosting environment: Development
+2026-07-12 14:01:40.762 +03:00 [INF] Content root path: C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform
+2026-07-12 14:01:54.572 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-07-12 14:02:03.523 +03:00 [INF] Executed DbCommand (53ms) [Parameters=[@p0='?' (Size = 16), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-12 14:02:15.708 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 3), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-12 14:02:23.964 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 15), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-12 14:02:34.273 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 16), @p1='?' (Size = 15), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-12 14:02:41.587 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 5), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-12 14:02:48.414 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 8), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-12 14:06:55.411 +03:00 [INF] Application is shutting down...
+2026-07-12 14:12:23.010 +03:00 [INF] Now listening on: http://localhost:5111
+2026-07-12 14:12:23.063 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-12 14:12:23.064 +03:00 [INF] Hosting environment: Development
+2026-07-12 14:12:23.065 +03:00 [INF] Content root path: C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform
+2026-07-12 14:12:45.437 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-07-12 14:12:47.470 +03:00 [INF] Executed DbCommand (23ms) [Parameters=[@p0='?' (Size = 16), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-12 14:12:53.084 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 5), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-12 14:12:58.430 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 15), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-12 14:13:04.603 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 17), @p1='?' (Size = 9), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime), @p4='?' (DbType = Double), @p5='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "WeatherQueryLogs" ("City", "Description", "Humidity", "QueriedAt", "Temperature", "WindSpeed")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5)
+RETURNING "Id";
+2026-07-12 14:16:11.738 +03:00 [INF] Application is shutting down...
+2026-07-12 14:16:49.888 +03:00 [INF] Now listening on: http://localhost:5111
+2026-07-12 14:16:49.938 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-12 14:16:49.940 +03:00 [INF] Hosting environment: Development
+2026-07-12 14:16:49.940 +03:00 [INF] Content root path: C:\Users\Asus\Desktop\WeatherIntelligencePlatform\WeatherIntelligencePlatform
+2026-07-12 14:17:00.386 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-07-12 14:17:02.035 +03:00 [INF] Executed DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "w"."Id", "w"."City", "w"."Description", "w"."Humidity", "w"."QueriedAt", "w"."Temperature", "w"."WindSpeed"
+FROM "WeatherQueryLogs" AS "w"
+ORDER BY "w"."QueriedAt" DESC

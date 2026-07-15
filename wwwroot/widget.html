@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hava Durumu Widget</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { 
+            font-family: 'Segoe UI', sans-serif;
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .widget {
+            background: linear-gradient(135deg, #0a0e17, #1a1f2e);
+            border-radius: 20px;
+            padding: 24px;
+            width: 320px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 12px 48px rgba(0,0,0,0.6);
+            font-family: 'Segoe UI', sans-serif;
+            color: #fff;
+        }
+        .widget .city { font-size: 24px; font-weight: 700; color: #00d4ff; }
+        .widget .temp { font-size: 48px; font-weight: 800; margin: 8px 0; }
+        .widget .desc { color: rgba(255,255,255,0.6); font-size: 16px; }
+        .widget .details {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .widget .details .item { 
+            background: rgba(255,255,255,0.04);
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .widget .details .item .label { font-size: 10px; color: rgba(255,255,255,0.3); text-transform: uppercase; }
+        .widget .details .item .value { font-size: 16px; font-weight: 600; margin-top: 2px; }
+        .widget .powered { text-align: center; margin-top: 12px; font-size: 11px; color: rgba(255,255,255,0.2); }
+        .widget .error { color: #f87171; text-align: center; padding: 10px; }
+        .loading { text-align: center; padding: 20px; color: rgba(255,255,255,0.4); }
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255,255,255,0.06);
+            border-top: 3px solid #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="widget" id="widget">
+        <div id="loadingState" class="loading">
+            <div class="spinner"></div>
+            <p>Yükleniyor...</p>
+        </div>
+        <div id="content" style="display:none;">
+            <div class="city" id="cityName">İstanbul</div>
+            <div class="temp" id="temp">--°C</div>
+            <div class="desc" id="desc">--</div>
+            <div class="details">
+                <div class="item"><div class="label">💧 Nem</div><div class="value" id="humidity">--</div></div>
+                <div class="item"><div class="label">💨 Rüzgar</div><div class="value" id="wind">--</div></div>
+                <div class="item"><div class="label">🌡️ Hisseden</div><div class="value" id="feels">--</div></div>
+            </div>
+            <div class="powered">⛅ WeatherIntel</div>
+        </div>
+        <div class="error" id="error" style="display:none;"></div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const city = urlParams.get('city') || 'İstanbul';
+
+        async function loadWidget() {
+            const loading = document.getElementById('loadingState');
+            const content = document.getElementById('content');
+            const error = document.getElementById('error');
+
+            loading.style.display = 'block';
+            content.style.display = 'none';
+            error.style.display = 'none';
+
+            try {
+                const res = await fetch(`/api/weather/current?city=${encodeURIComponent(city)}`);
+                if (!res.ok) throw new Error('Veri alınamadı');
+                const data = await res.json();
+
+                document.getElementById('cityName').textContent = data.city || city;
+                document.getElementById('temp').textContent = Math.round(data.temperature || 0) + '°C';
+                document.getElementById('desc').textContent = data.description || 'Bilinmiyor';
+                document.getElementById('humidity').textContent = '%' + (data.humidity || 0);
+                document.getElementById('wind').textContent = (data.windSpeed || 0) + ' km/s';
+                document.getElementById('feels').textContent = Math.round(data.feelsLike || data.temperature || 0) + '°C';
+
+                loading.style.display = 'none';
+                content.style.display = 'block';
+            } catch (err) {
+                loading.style.display = 'none';
+                error.textContent = '❌ ' + err.message;
+                error.style.display = 'block';
+            }
+        }
+
+        loadWidget();
+    </script>
+</body>
+</html>
