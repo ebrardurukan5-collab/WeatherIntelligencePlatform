@@ -6,7 +6,7 @@ using WeatherIntelligencePlatform.Services.Providers;
 using WeatherIntelligencePlatform.Repositories;
 using WeatherIntelligencePlatform.Middlewares;
 
-// ===== BELLEK OPTİMİZASYONU (EXIT 139 ÇÖZÜMÜ) =====
+// ===== BELLEK OPTİMİZASYONU =====
 AppContext.SetSwitch("System.GC.Server", false);
 AppContext.SetSwitch("System.GC.Concurrent", true);
 
@@ -22,13 +22,7 @@ builder.Host.UseSerilog((context, configuration) =>
 });
 
 // ===== Servisler =====
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.PropertyNamingPolicy = null;
-        options.JsonSerializerOptions.WriteIndented = false;
-    });
-
+builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
 builder.Services.AddMemoryCache();
