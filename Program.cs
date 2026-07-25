@@ -81,4 +81,11 @@ app.UseCors("AllowAll");
 app.UseAuthorization();
 app.MapControllers();
 
+// ===== VERİTABANI MIGRATION (OTOMATİK) =====
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<WeatherDbContext>();
+    dbContext.Database.Migrate();
+}
+
 app.Run();
