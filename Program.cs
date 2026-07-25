@@ -6,6 +6,10 @@ using WeatherIntelligencePlatform.Services.Providers;
 using WeatherIntelligencePlatform.Repositories;
 using WeatherIntelligencePlatform.Middlewares;
 
+// ===== BELLEK OPTİMİZASYONU (EXIT 139 ÇÖZÜMÜ) =====
+AppContext.SetSwitch("System.GC.Server", false);
+AppContext.SetSwitch("System.GC.Concurrent", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // ===== Logging =====
@@ -18,7 +22,13 @@ builder.Host.UseSerilog((context, configuration) =>
 });
 
 // ===== Servisler =====
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        options.JsonSerializerOptions.WriteIndented = false;
+    });
+
 builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
 builder.Services.AddMemoryCache();
@@ -46,7 +56,7 @@ builder.Services.AddScoped<RouteWeatherService>();
 // ===== STATS SERVİSİ =====
 builder.Services.AddSingleton<StatsService>();
 
-// ===== NOTIFICATION SERVİSİ (YENİ) =====
+// ===== NOTIFICATION SERVİSİ =====
 builder.Services.AddScoped<NotificationService>();
 
 // ===== CORS =====

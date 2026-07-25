@@ -4,8 +4,10 @@ COPY *.csproj .
 RUN dotnet restore
 COPY . .
 RUN dotnet publish -c Release -o /publish
+
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 COPY --from=build /publish .
 ENV ASPNETCORE_URLS=http://0.0.0.0:10000
+ENV DOTNET_GCHeapHardLimit=400000000
 ENTRYPOINT ["dotnet", "WeatherIntelligencePlatform.dll"]
