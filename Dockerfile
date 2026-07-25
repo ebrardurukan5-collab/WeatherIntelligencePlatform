@@ -10,4 +10,5 @@ WORKDIR /app
 COPY --from=build /publish .
 ENV ASPNETCORE_URLS=http://0.0.0.0:10000
 ENV DOTNET_GCHeapHardLimit=400000000
+ENV DOTNET_GCHeapCount=1
 ENTRYPOINT ["dotnet", "WeatherIntelligencePlatform.dll"]
