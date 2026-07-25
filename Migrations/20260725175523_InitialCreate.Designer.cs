@@ -11,7 +11,7 @@ using WeatherIntelligencePlatform.Data;
 namespace WeatherIntelligencePlatform.Migrations
 {
     [DbContext(typeof(WeatherDbContext))]
-    [Migration("20260710125427_InitialCreate")]
+    [Migration("20260725175523_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
